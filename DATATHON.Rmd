@@ -1,0 +1,34 @@
+---
+title: "DATATHON"
+author: "Ricardo Torres Arevalo"
+date: "2023-02-18"
+output: html_document
+---
+#Brainstorm
+
+
+##Loading data
+```{r}
+library(tidyverse)
+
+store <- read_delim("data/sales_data_2017_2018.csv")
+
+store %>% 
+  dim()
+
+names(store)
+
+store %>% 
+sample_n(10)
+
+```
+##Seeing What kinds of products there are and their prices
+
+```{r}
+store %>% 
+  summarise(items = n_distinct(item_name))
+```
+
+
+
+
