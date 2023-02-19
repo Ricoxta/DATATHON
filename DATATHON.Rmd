@@ -10,8 +10,6 @@ output: html_document
 
 Questions we will be answering  
 
-_How does the year 2017 compare to the year 2018? Were there any significant changes in purchasing habits of the customers?_   
-
 _What trends do we notice in the basket size (total items in one receipt)?_  
 
 _Which items should the store stop selling? Why?_  
@@ -24,7 +22,7 @@ _Which items should the store stop selling? Why?_
 
 ```{r, message=FALSE}
 library(tidyverse)
-
+library(scales)
 store <- read_delim("sales_data_2017_2018_for_tableau_with_new_date_columns.csv")
 
 store %>% 
@@ -93,9 +91,9 @@ store %>%
 store %>% 
   group_by(sub_category) %>% 
   filter(year == 2017) %>% 
-  summarise(amount = sum(quantity)) %>% 
-  filter(rank(desc(amount)) <= 15) %>% 
-    arrange(desc(amount))
+  summarise(amount_2017 = sum(quantity)) %>% 
+  filter(rank(desc(amount_2017)) <= 15) %>% 
+    arrange(desc(amount_2017))
   
 ```
 
@@ -105,9 +103,9 @@ store %>%
 store %>% 
   group_by(sub_category) %>% 
   filter(year == 2018) %>% 
-  summarise(amount = sum(quantity)) %>% 
-  filter(rank(desc(amount)) <= 15) %>% 
-    arrange(desc(amount))
+  summarise(amount_2018 = sum(quantity)) %>% 
+  filter(rank(desc(amount_2018)) <= 15) %>% 
+    arrange(desc(amount_2018))
 ```
 
 
@@ -147,7 +145,10 @@ store %>%
 ```{r}
 store %>% 
   filter(total_profit < 0)%>% 
-  filter(sub_category == "Cabbages") 
+  filter(sub_category == "Cabbages") %>% 
+  mutate(loss = sum(total_profit), amount = sum(quantity)) %>% 
+  select(item_name, loss, amount) %>% 
+  head(1)
   
   
 ```
@@ -168,5 +169,40 @@ Another item that the store could get rid of would be Avocado Hass Medium since 
 
 
 
+## Finding the most profitable month by sales
+how to approach 
+
+```{r}
+store %>% 
+  ggplot(aes(month_number, total_profit, fill = factor(month_number)))+
+  geom_col()+
+  geom_line()+
+  scale_x_continuous(breaks = pretty_breaks())+
+  labs(x = "Months (by number)",
+       y = "Total Profits ($)",
+       fill = "Month Number\n")
+```
+
+Australia has opposite seasons from us, therefore whenever we have our winter season, they have summer. The peak amount of sales for the store occur when Australia is in its summer season.
 
 
+```{r}
+store %>% 
+  filter(sub_category == "Apples") %>% 
+  # filter(total_profit > 0) %>%  
+  arrange(total_profit)
+  # summarise(apple_profit = mean(total_profit))
+```
+
+Another item that the store should get rid of is Apple Granny Smith 1kg bags because they barely make any sales and are the only apple product that is making the store lose money.
+
+```{r}
+store %>% 
+  group_by(hour) %>% 
+  mutate(profit = sum(total_profit)) %>% 
+  ggplot(aes(hour, profit, fill = factor(year)))+
+  geom_col(position = "dodge")+
+  scale_x_continuous(breaks = pretty_breaks())
+```
+
+According to this thing, the total profits for the hour in 2017 match the total profits for 2018. However, since 2017 was run 24/7 they generate the greater profit then 2018 because they are not missing out on the money. 
