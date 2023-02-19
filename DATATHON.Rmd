@@ -61,34 +61,110 @@ This shows the amount of max amount of
 
 store %>% 
 group_by(main_category) %>% 
-summarise(main_cc = length(main_category)) %>% 
+summarise(main_cc = length(main_category), profit = sum(total_profit)) %>% 
   arrange(desc(main_cc))
 
 ```
 ```{r}
 store %>% 
   group_by(sub_category) %>% 
+  filter(total_profit < 0, year == 2017) %>% 
+  summarise(profit_2017 = sum(total_profit)) %>% 
+  filter(rank(profit_2017) <= 20) %>% 
+    arrange(profit_2017)
+  
+```
+
+*2017 LOSSES*
+
+```{r}
+store %>% 
+  group_by(sub_category) %>% 
+  filter(total_profit < 0, year == 2018) %>% 
+  summarise(profit_2018 = sum(total_profit)) %>% 
+  filter(rank(profit_2018) <= 20) %>% 
+    arrange(profit_2018)
+  
+```
+
+*2018 WORSE OF YEAAR MOY LIFE*
+
+```{r}
+store %>% 
+  group_by(sub_category) %>% 
+  filter(year == 2017) %>% 
+  summarise(amount = sum(quantity)) %>% 
+  filter(rank(desc(amount)) <= 15) %>% 
+    arrange(desc(amount))
+  
+```
+
+*This shows the most bought sub categories in the store. Items that could be dropped would be Asian Veggies since they are not being sold a lot compared to its other sub categories and the store is paying money to import them which is causing loss in profit in that sub category. Something else we can get rid of are condiments since they are also not selling as much as the other categories and their loss in profit has increased more in 2018 than it has in 2017. Therefore, if the store does not get rid of it, then the loss in profit will only increase over the next couple of years. *
+
+```{r}
+store %>% 
+  group_by(sub_category) %>% 
+  filter(year == 2018) %>% 
+  summarise(amount = sum(quantity)) %>% 
+  filter(rank(desc(amount)) <= 15) %>% 
+    arrange(desc(amount))
+```
+
+
+```{r}
+store %>% 
+  group_by(sub_category) %>% 
+  filter(year == 2017) %>% 
+  summarise(amt_2017 = sum(quantity)) %>% 
+  filter(rank(amt_2017) <= 15) %>% 
+  arrange(amt_2017)
+   
+```
+
+*Shows quantity sold for each sub category in the year 2017*
+
+
+```{r}
+store %>% 
+  group_by(sub_category) %>% 
+  filter(year == 2018) %>% 
+  summarise(amt_2018 = sum(quantity)) %>% 
+   filter(rank(amt_2018) <= 15) %>% 
+  arrange(amt_2018)
+   
+```
+
+_Shows quantity sold for each sub category in the year 2018_  
+
+```{r}
+store %>% 
+  group_by(sub_category) %>% 
   summarise(sub_cc = length(sub_category)) %>%
   arrange(sub_cc)
 ```
-```{r}
-store_s <- store %>% 
-  sample_n(1000) 
+
   
-  
-```
 ```{r}
 store %>% 
-  group_by(main_category) %>% 
-  summarise(main_cc = length(main_category)) %>%
-  arrange(desc(main_cc)) %>% 
-  ggplot(aes(main_category, main_cc, col = main_category, fill = main_category)) +
-  geom_col(width = .5, position = position_dodge(.5)) +
-  theme(text = element_text(size = 5), aspect.ratio = 1/4)
+  filter(total_profit < 0)%>% 
+  filter(sub_category == "Cabbages") 
+  
   
 ```
+  
+FROM OUR ANALYSIS, we should stop selling Wombok Cabbages because they are the only item that is causing loss in profit. Meanwhile the rest of the cabbages gain profit after each purchase.
 
 
+
+```{r}
+store %>% 
+  filter(total_profit < 0) %>% 
+  filter(sub_category == "Avocadoes") %>% 
+  mutate(loss = sum(total_profit), amount = sum(quantity)) %>% 
+  select(item_name, loss, amount) %>% 
+  head(1)
+```
+Another item that the store could get rid of would be Avocado Hass Medium since the are the item that loses the second most amount of profit and it is not sold as much as the rest of the avocadoes.
 
 
 
