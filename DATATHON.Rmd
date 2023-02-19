@@ -25,20 +25,15 @@ library(scales)
 library(tinytex)
 store <- read_delim("sales_data_2017_2018_for_tableau_with_new_date_columns.csv")
 
-store %>% 
-  dim()
 
 names(store)
 
 ```
 
+These were the variables that we were working with while we attempted to answer the questions.
 
 
-
-
-
-
-
+## Profits and Losses of Store
 ```{r}
 
 store %>% 
@@ -47,6 +42,9 @@ summarise(main_cc = length(main_category), profit = sum(total_profit)) %>%
   arrange(desc(main_cc))
 
 ```
+
+This table shows the the amount of products bought and their profits. This would be organized by having the products be grouped by their main category in the store. 
+
 ```{r}
 store %>% 
   group_by(sub_category) %>% 
@@ -57,7 +55,7 @@ store %>%
   
 ```
 
-*2017 LOSSES*
+*This table organized the data set by the store's sub categories and would show what sub categories were losing the store money and by how much it was losing it by in the year 2017.*
 
 ```{r}
 store %>% 
@@ -69,7 +67,7 @@ store %>%
   
 ```
 
-*2018 WORSE OF YEAAR MOY LIFE*
+*This table shows the sub categories that were lsoing the most amount of money and by how much. This would allow us to see what categories need to be revised in order to see where the store is truly losing their money in.*
 
 ```{r}
 store %>% 
@@ -92,38 +90,13 @@ store %>%
     arrange(desc(amount_2018))
 ```
 
-
-```{r}
-store %>% 
-  group_by(sub_category) %>% 
-  filter(year == 2017) %>% 
-  summarise(amt_2017 = sum(quantity)) %>% 
-  filter(rank(amt_2017) <= 15) %>% 
-  arrange(amt_2017)
-   
-```
-
-*Shows quantity sold for each sub category in the year 2017*
+*This part of the data shows what sub categories customers were buying the most of. This would allow us to see if the sub categories that were losing money were being bought a lot or not. That way we can determine if the products in that sub category are worth selling the store anymore. The data was set to be for 2018.*
 
 
-```{r}
-store %>% 
-  group_by(sub_category) %>% 
-  filter(year == 2018) %>% 
-  summarise(amt_2018 = sum(quantity)) %>% 
-   filter(rank(amt_2018) <= 15) %>% 
-  arrange(amt_2018)
-   
-```
 
-_Shows quantity sold for each sub category in the year 2018_  
 
-```{r}
-store %>% 
-  group_by(sub_category) %>% 
-  summarise(sub_cc = length(sub_category)) %>%
-  arrange(sub_cc)
-```
+
+
 
   
 ```{r}
@@ -137,7 +110,7 @@ store %>%
   
 ```
   
-FROM OUR ANALYSIS, we should stop selling Wombok Cabbages because they are the only item that is causing loss in profit. Meanwhile the rest of the cabbages gain profit after each purchase.
+By looking at this data, we determined that the store should stop selling Wombok Cabbages because they are the only item that is causing loss in profit. Meanwhile the rest of the cabbages gain profit after each purchase.
 
 
 
@@ -154,7 +127,7 @@ Another item that the store could get rid of would be Avocado Hass Medium since 
 
 
 ## Finding the most profitable month by sales
-how to approach 
+
 
 ```{r}
 store %>% 
@@ -167,7 +140,7 @@ store %>%
        fill = "Month Number\n")
 ```
 
-Australia has opposite seasons from us, therefore whenever we have our winter season, they have summer. The peak amount of sales for the store occur when Australia is in its summer season.
+Australia has opposite seasons from us, therefore whenever we have our winter season, they have summer. The peak amount of sales for the store occur when Australia is in its summer season.THese months are towards the beginning and end of the year. 
 
 
 ```{r}
@@ -178,7 +151,7 @@ store %>%
   # summarise(apple_profit = mean(total_profit))
 ```
 
-Another item that the store should get rid of is Apple Granny Smith 1kg bags because they barely make any sales and are the only apple product that is making the store lose money.
+Another item that the store should get rid of is Apple Granny Smith 1kg bags because they barely make any sales and are the only apple product that is making the store lose money. The stores sells a lot of apples.
 
 ```{r}
 store %>% 
@@ -189,4 +162,4 @@ store %>%
   scale_x_continuous(breaks = pretty_breaks())
 ```
 
-According to this thing, the total profits for the hour in 2017 match the total profits for 2018. However, since 2017 was run 24/7 they generate the greater profit then 2018 because they are not missing out on the money. 
+According to the data, the total profits for the hour in 2017 match the total profits for 2018. However, since 2017 was run 24/7 they generate the greater profit then 2018 because they are not missing out on the money. The only change they can make to improve there margain for profits would be to change the prices on what they are selling, increase costs for customers to buy. 
