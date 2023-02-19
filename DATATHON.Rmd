@@ -2,7 +2,7 @@
 title: "DATATHON"
 author: "Ricardo Torres Arevalo, Jack Landers"
 date: "2023-02-18"
-output: html_document
+output: pdf_document
 ---
 
 
@@ -10,12 +10,11 @@ output: html_document
 
 Questions we will be answering  
 
-_What trends do we notice in the basket size (total items in one receipt)?_  
-
 _Which items should the store stop selling? Why?_  
 
+_What was the most profitable month in the dataset?_
 
-## How we will solve themm
+
 
 
 ## Loading data  
@@ -23,6 +22,7 @@ _Which items should the store stop selling? Why?_
 ```{r, message=FALSE}
 library(tidyverse)
 library(scales)
+library(tinytex)
 store <- read_delim("sales_data_2017_2018_for_tableau_with_new_date_columns.csv")
 
 store %>% 
@@ -32,27 +32,11 @@ names(store)
 
 ```
 
-### Basket Size Data?
-```{r}
-  store %>% 
-  group_by(receipt_id) %>% 
-  arrange(receipt_id)  
-  
-  
-```
 
-```{r}
-store %>% 
-  group_by(receipt_id) %>% 
-  summarise(main_cat_count = length(main_category)) 
-  
-```
 
-This shows the amount of max amount of 
 
-```{r}
 
-```
+
 
 
 ```{r}
