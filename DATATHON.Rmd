@@ -1,33 +1,95 @@
 ---
 title: "DATATHON"
-author: "Ricardo Torres Arevalo"
+author: "Ricardo Torres Arevalo, Jack Landers"
 date: "2023-02-18"
 output: html_document
 ---
-#Brainstorm
 
 
-##Loading data
-```{r}
+## Brainstorm  
+
+Questions we will be answering  
+
+_How does the year 2017 compare to the year 2018? Were there any significant changes in purchasing habits of the customers?_   
+
+_What trends do we notice in the basket size (total items in one receipt)?_  
+
+_Which items should the store stop selling? Why?_  
+
+
+## How we will solve themm
+
+
+## Loading data  
+
+```{r, message=FALSE}
 library(tidyverse)
 
-store <- read_delim("data/sales_data_2017_2018.csv")
+store <- read_delim("sales_data_2017_2018_for_tableau_with_new_date_columns.csv")
 
 store %>% 
   dim()
 
 names(store)
 
-store %>% 
-sample_n(10)
-
 ```
-##Seeing What kinds of products there are and their prices
+
+### Basket Size Data?
+```{r}
+  store %>% 
+  group_by(receipt_id) %>% 
+  arrange(receipt_id)  
+  
+  
+```
 
 ```{r}
 store %>% 
-  summarise(items = n_distinct(item_name))
+  group_by(receipt_id) %>% 
+  summarise(main_cat_count = length(main_category)) 
+  
 ```
+
+This shows the amount of max amount of 
+
+```{r}
+
+```
+
+
+```{r}
+
+store %>% 
+group_by(main_category) %>% 
+summarise(main_cc = length(main_category)) %>% 
+  arrange(desc(main_cc))
+
+```
+```{r}
+store %>% 
+  group_by(sub_category) %>% 
+  summarise(sub_cc = length(sub_category)) %>%
+  arrange(sub_cc)
+```
+```{r}
+store_s <- store %>% 
+  sample_n(1000) 
+  
+  
+```
+```{r}
+store %>% 
+  group_by(main_category) %>% 
+  summarise(main_cc = length(main_category)) %>%
+  arrange(desc(main_cc)) %>% 
+  ggplot(aes(main_category, main_cc, col = main_category, fill = main_category)) +
+  geom_col(width = .5, position = position_dodge(.5)) +
+  theme(text = element_text(size = 5), aspect.ratio = 1/4)
+  
+```
+
+
+
 
 
 
