@@ -16,9 +16,6 @@ _What was the most profitable month in the dataset?_
 
 
 
-
-## Loading data  
-
 ```{r, message=FALSE}
 library(tidyverse)
 library(scales)
