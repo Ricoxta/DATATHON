@@ -9,6 +9,7 @@
 
 library(shiny)
 library(tidyverse)
+read_delim("sales_data_2017_2018_for_tableau_with_new_date_columns.csv")
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
