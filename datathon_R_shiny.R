@@ -15,23 +15,19 @@ read_delim("sales_data_2017_2018_for_tableau_with_new_date_columns.csv")
 ui <- fluidPage(
 
     # Application title
-    titlePanel("Old Faithful Geyser Data"),
-
-    # Sidebar with a slider input for number of bins 
-    sidebarLayout(
-        sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
-        ),
-
-        # Show a plot of the generated distribution
-        mainPanel(
-           plotOutput("distPlot")
-        )
+    titlePanel("Datathon Store Revamp"),
+    tabsetPanel(
+      tabPanel(
+        "First Panel"
+      ),
+      tabPanel(
+        "Second Panel"
+      ),
+      tabPanel(
+        "Third Panel"
+      )
     )
+
 )
 
 # Define server logic required to draw a histogram
