@@ -9,7 +9,7 @@
 
 library(shiny)
 library(tidyverse)
-read_delim("sales_data_2017_2018_for_tableau_with_new_date_columns.csv")
+newStore <- read_delim("sales_data_2017_2018_for_tableau_with_new_date_columns.csv")
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
@@ -18,13 +18,23 @@ ui <- fluidPage(
     titlePanel("Datathon Store Revamp"),
     tabsetPanel(
       tabPanel(
-        "First Panel"
+        "Overview",
+        p("This will show the names and data overview for the store."),
+        mainPanel(tableOutput("dataOv"))
       ),
       tabPanel(
-        "Second Panel"
+        "Finding Most Profitable Month for Store",
+        p("This will be using a column graph in order to find when the store is the most profitable."),
+        mainPanel(plotOutput("profitPlot"))
       ),
       tabPanel(
-        "Third Panel"
+        "Hot Items",
+        p("This will contain stacked columns with the top 3 highest selling products each month
+            which the user will be able to change the category of. ")
+      ),
+      tabPanel(
+        "Reducing Losses",
+        p("Unknown yet")
       )
     )
 
@@ -33,15 +43,29 @@ ui <- fluidPage(
 # Define server logic required to draw a histogram
 server <- function(input, output) {
 
-    output$distPlot <- renderPlot({
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white',
-             xlab = 'Waiting time to next eruption (in mins)',
-             main = 'Histogram of waiting times')
+    output$dataOv <- renderTable({
+      head(newStore)
+    })
+    
+    
+  #Graph for the profits of the store overall(make it to be interactive between before/after change)
+  #also when you hover it shows the value at the top of the column
+    output$profitPlot <- renderPlot({
+       newStore %>% 
+        group_by(month_number) %>% 
+        filter(year == 2018) %>%
+        mutate(hot = sum(total_profit) / 1000000) %>% #1 million
+        ggplot(aes(month_name, hot , fill = month_name)) +
+        geom_col()+
+      scale_x_discrete(limits = month.name)+
+        labs(x = "Month", y = "Profits(millions)")
+      
+      
+    })
+    
+    output$hotItems <- renderPlot({
+      newStore %>% 
+        filter(year == 2018)
     })
 }
 

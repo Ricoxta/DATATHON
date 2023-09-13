@@ -128,8 +128,8 @@ Another item that the store could get rid of would be Avocado Hass Medium since 
 
 ```{r}
 store %>% 
-  ggplot(aes(month_number, total_profit, fill = factor(month_number)))+
-  geom_col()+
+  ggplot(
+  geom_col()
   geom_line()+
   scale_x_continuous(breaks = pretty_breaks())+
   labs(x = "Months (by number)",
