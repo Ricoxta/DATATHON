@@ -31,13 +31,11 @@ ui <- fluidPage(
         "Hot Items",
         p("This will contain stacked columns with the top 3 highest selling products each month
             which the user will be able to change the category of. "),
-        sidebarLayout(
           sidebarPanel(
             radioButtons("mainCat", "Choose a main category", choices =
              list("Fresh Produce", "Beverages", "Pantry Staples", "Snacks", "Flowers", "Breads & Bakery", "Bag", "Miscellaneous"),
              selected = "Fresh Produce")
-          )
-        ),
+          ),
         mainPanel(tableOutput("usub"))
       ),
       tabPanel(
