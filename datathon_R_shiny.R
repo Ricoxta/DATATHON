@@ -30,7 +30,15 @@ ui <- fluidPage(
       tabPanel(
         "Hot Items",
         p("This will contain stacked columns with the top 3 highest selling products each month
-            which the user will be able to change the category of. ")
+            which the user will be able to change the category of. "),
+        sidebarLayout(
+          sidebarPanel(
+            radioButtons("mainCat", "Choose a main category", choices =
+             list("Fresh Produce", "Beverages", "Pantry Staples", "Snacks", "Flowers", "Breads & Bakery", "Bag", "Miscellaneous"),
+             selected = "Fresh Produce")
+          )
+        ),
+        mainPanel(tableOutput("usub"))
       ),
       tabPanel(
         "Reducing Losses",
@@ -65,9 +73,15 @@ server <- function(input, output) {
     
     output$hotItems <- renderPlot({
       newStore %>% 
-        filter(year == 2018)
+        filter(year == 2018)  
+        
     })
-}
+output$usub <- renderTable({
+  newStore %>% 
+    summarise(unique(main_category))
+})
 
+#---------------------------------END-------------------------------------------
+}
 # Run the application 
 shinyApp(ui = ui, server = server)
