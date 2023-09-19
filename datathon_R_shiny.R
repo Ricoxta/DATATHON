@@ -36,7 +36,8 @@ ui <- fluidPage(
              list("Fresh Produce", "Beverages", "Pantry Staples", "Snacks", "Flowers", "Breads & Bakery", "Bag", "Miscellaneous"),
              selected = "Fresh Produce")
           ),
-        mainPanel(tableOutput("usub"))
+        mainPanel(plotOutput("hotItems"))
+        #mainPanel(tableOutput("usub"))
       ),
       tabPanel(
         "Reducing Losses",
@@ -68,15 +69,34 @@ server <- function(input, output) {
       
       
     })
-    
+    #------TRYING TO DO REACTIVITY------------
+    # hotData <-  reactive({
+    #   newStore %>% 
+    #     filter(year == 2018, main_category %in% input$mainCat) %>% 
+    #     group_by(month_number, sub_category) %>% 
+    #     mutate(hotItems = sum(sub_category)) %>% 
+    #     filter(rank(desc(hotItems)) < 4) %>%
+    #     arrange(desc(hotItems))  
+    #    #USE HEAD TO SEE IF IT DOES THE SAME THING AS RANK TO GET TOP 3
+    #    # head(3)
+    # })
     output$hotItems <- renderPlot({
+  
       newStore %>% 
-        filter(year == 2018)  
+        filter(year == 2018, main_category %in% input$mainCat) %>% 
+        group_by(month_number, item_name) %>% 
+        mutate(hotItems = sum(quantity)) %>% 
+        # filter(rank(desc(hotItems)) <= 3) %>% 
+        arrange(desc(hotItems)) %>% 
+         ggplot(aes(month_name, hotItems, fill = sub_category))+
+        geom_bar(position = "stack", stat = "identity")+
+        scale_x_discrete(limits = month.name)+
+        labs(x = "Month", y = "Items Sold")
         
     })
 output$usub <- renderTable({
   newStore %>% 
-    summarise(unique(main_category))
+    summarise(unique(sub_category))
 })
 
 #---------------------------------END-------------------------------------------
